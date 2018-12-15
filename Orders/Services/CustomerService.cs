@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orders.Models;
 
 namespace Orders.Services
 {
-    public class SimpleService : ISimpleService
+    public class CustomerService : ICustomerService
     {
         private IList<Customer> _customers;
 
-        public SimpleService()
+        public CustomerService()
         {
             _customers = new List<Customer>
             {
@@ -38,7 +37,7 @@ namespace Orders.Services
         }
     }
 
-    public interface ISimpleService
+    public interface ICustomerService
     {
         Customer GetCustomerById(int id);
 
