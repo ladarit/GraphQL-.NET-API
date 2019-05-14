@@ -4,7 +4,7 @@ namespace Orders.Schema
 {
     public class OrdersSchema : GraphQL.Types.Schema
     {
-        public OrdersSchema(OrdersQuery query, IDependencyResolver resolver, OrdersMutation mutation)
+        public OrdersSchema(OrdersQuery query, OrdersMutation mutation, IDependencyResolver resolver)
         {
             Query = query;
             Mutation = mutation;

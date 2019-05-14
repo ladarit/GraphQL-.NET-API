@@ -13,6 +13,7 @@ namespace Orders.Schema
             Field(o => o.Description);
             Field<CustomerType>("customer", resolve: context => customers.GetCustomerByIdAsync(context.Source.CustomerId));
             Field(o => o.Created);
+	        Field<OrderStatusesEnum>("status", resolve: context => context.Source.Status);
         }
     }
 }

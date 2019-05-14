@@ -30,7 +30,7 @@ namespace Orders.Schema
                 "startOrder",
                 arguments: new QueryArguments
                 (
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "orderId"}
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "orderId" }
                 ),
                 resolve: async context =>
                 {
