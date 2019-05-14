@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orders.Models;
+using Orders.Schema;
 
 namespace Orders.Services
 {
@@ -10,9 +11,12 @@ namespace Orders.Services
     {
         private IList<Order> _orders;
 
-        public OrderService()
+	    private readonly IOrderEventService _events;
+
+		public OrderService(IOrderEventService events)
         {
-            _orders = new List<Order>
+	        _events = events;
+			_orders = new List<Order>
             {
                 new Order("1000", "250 Conference brochures", DateTime.Now, 1, "FAEBD971-CBA5-4CED-8AD5-CC0B8D4B7827"),
                 new Order("2000", "250 T-shirts", DateTime.Now.AddHours(1), 2, "F43A4F9D-7AE9-4A19-93D9-2018387D5378"),
@@ -44,6 +48,8 @@ namespace Orders.Services
         public Task<Order> CreateAsync(Order order)
         {
             _orders.Add(order);
+	        var orderEvent = new OrderEvent(order.Id, order.Name, OrderStatuses.CREATED, DateTime.Now);
+	        _events.AddEvent(orderEvent);
             return Task.FromResult(order);
         }
 
@@ -51,7 +57,9 @@ namespace Orders.Services
         {
             var order = GetById(orderId);
             order.Start();
-            return Task.FromResult(order);
+	        var orderEvent = new OrderEvent(order.Id, order.Name, OrderStatuses.PROCESSING, DateTime.Now);
+	        _events.AddEvent(orderEvent);
+			return Task.FromResult(order);
         }
     }
 

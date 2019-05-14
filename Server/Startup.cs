@@ -8,38 +8,41 @@ using Orders.Services;
 
 namespace Server
 {
-    public class Startup
-    {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton<IOrderService, OrderService>();
-            services.AddSingleton<ICustomerService, CustomerService>();
-            services.AddSingleton<OrderType>();
-            services.AddSingleton<CustomerType>();
-            services.AddSingleton<OrderStatusesEnum>();
-            services.AddSingleton<OrdersQuery>();
-            services.AddSingleton<OrdersSchema>();
-            services.AddSingleton<OrderCreateInputType>();
-            services.AddSingleton<OrdersMutation>();
-            services.AddSingleton<IDependencyResolver>(c => new FuncDependencyResolver(type => c.GetRequiredService(type)));
-            services.AddGraphQL().AddWebSockets();
-        }
+	public class Startup
+	{
+		// This method gets called by the runtime. Use this method to add services to the container.
+		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddSingleton<IOrderService, OrderService>();
+			services.AddSingleton<ICustomerService, CustomerService>();
+			services.AddSingleton<IOrderEventService, OrderEventService>();
+			services.AddSingleton<OrderType>();
+			services.AddSingleton<CustomerType>();
+			services.AddSingleton<OrderStatusesEnum>();
+			services.AddSingleton<OrdersQuery>();
+			services.AddSingleton<OrdersSchema>();
+			services.AddSingleton<OrderCreateInputType>();
+			services.AddSingleton<OrdersMutation>();
+			services.AddSingleton<OrdersSubscription>();
+			services.AddSingleton<OrderEventType>();
+			services.AddSingleton<IDependencyResolver>(c => new FuncDependencyResolver(type => c.GetRequiredService(type)));
+			services.AddGraphQL().AddWebSockets();
+		}
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-            app.UseWebSockets();
-            app.UseGraphQLWebSockets<OrdersSchema>();
-            app.UseGraphQL<OrdersSchema>();
-        }
-    }
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
+			app.UseWebSockets();
+			app.UseGraphQLWebSockets<OrdersSchema>();
+			app.UseGraphQL<OrdersSchema>();
+		}
+	}
 }
