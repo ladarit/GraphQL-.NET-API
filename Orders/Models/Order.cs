@@ -26,7 +26,12 @@ namespace Orders.Models
 
         public int CustomerId { get; set; }
 
-        public OrderStatuses Status { get; set; }
+        public OrderStatuses Status { get;  private set; }
+
+        public void Start()
+        {
+            Status = OrderStatuses.PROCESSING;
+        }
     }
 
     [Flags]

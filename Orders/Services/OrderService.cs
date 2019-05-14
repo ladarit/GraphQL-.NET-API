@@ -6,7 +6,7 @@ using Orders.Models;
 
 namespace Orders.Services
 {
-    public class OrderService: IOrderService
+    public class OrderService : IOrderService
     {
         private IList<Order> _orders;
 
@@ -21,6 +21,16 @@ namespace Orders.Services
             };
         }
 
+        private Order GetById(string id)
+        {
+            var order = _orders.SingleOrDefault(o => Equals(o.Id, id));
+            if (order == null)
+            {
+                throw new ArgumentException($"Order ID '{id}' is invalid");
+            }
+            return order;
+        }
+
         public Task<Order> GetOrderByIdAsync(string id)
         {
             return Task.FromResult(_orders.Single(o => Equals(o.Id, id)));
@@ -30,6 +40,19 @@ namespace Orders.Services
         {
             return Task.FromResult(_orders.AsEnumerable());
         }
+
+        public Task<Order> CreateAsync(Order order)
+        {
+            _orders.Add(order);
+            return Task.FromResult(order);
+        }
+
+        public Task<Order> StartAsync(string orderId)
+        {
+            var order = GetById(orderId);
+            order.Start();
+            return Task.FromResult(order);
+        }
     }
 
     public interface IOrderService
@@ -37,5 +60,9 @@ namespace Orders.Services
         Task<Order> GetOrderByIdAsync(string id);
 
         Task<IEnumerable<Order>> GetOrdersAsync();
+
+        Task<Order> CreateAsync(Order order);
+
+        Task<Order> StartAsync(string orderId);
     }
 }

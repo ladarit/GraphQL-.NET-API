@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GraphQL;
+﻿using GraphQL;
 using GraphQL.Server;
-using GraphQL.Server.Transports.AspNetCore;
-using GraphQL.Server.Transports.WebSockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Orders.Schema;
 using Orders.Services;
@@ -28,6 +21,8 @@ namespace Server
             services.AddSingleton<OrderStatusesEnum>();
             services.AddSingleton<OrdersQuery>();
             services.AddSingleton<OrdersSchema>();
+            services.AddSingleton<OrderCreateInputType>();
+            services.AddSingleton<OrdersMutation>();
             services.AddSingleton<IDependencyResolver>(c => new FuncDependencyResolver(type => c.GetRequiredService(type)));
             services.AddGraphQL().AddWebSockets();
         }
